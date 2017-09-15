@@ -1,5 +1,5 @@
 //
-//  NavigationServices.swift
+//  NavigationService.swift
 //  
 //
 //  Created by Roberto Gomez Muñoz on 14/9/17.
@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 import MapKit
 
-public enum NavigationServices {
+public enum NavigationService {
     case AppleMaps
     case GoogleMaps
     case Waze
     
-    private static let allServices: [NavigationServices] = [.AppleMaps, .GoogleMaps, .Waze]
-    private static var availableServices: [NavigationServices] { return allServices.filter(availableService) }
+    private static let allServices: [NavigationService] = [.AppleMaps, .GoogleMaps, .Waze]
+    private static var availableServices: [NavigationService] { return allServices.filter(availableService) }
     
     private var name: String {
         switch self {
@@ -56,7 +56,7 @@ public enum NavigationServices {
         return URL(string: self.serviceUrlString(location))
     }
     
-    private static func availableService(_ service: NavigationServices) -> Bool {
+    private static func availableService(_ service: NavigationService) -> Bool {
         if service == .AppleMaps { return true }
         
         return URL(string: service.baseURL).flatMap { UIApplication.shared.canOpenURL($0) } ?? false
@@ -76,7 +76,7 @@ public enum NavigationServices {
     public static func alertController(location: CLLocationCoordinate2D, title: String, message: String?, completion: @escaping (Bool) -> ()) -> UIAlertController {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
      
-        NavigationServices.availableServices.forEach{ navType in
+        NavigationService.availableServices.forEach{ navType in
             alertVC.addAction(UIAlertAction(title: navType.name, style: .default, handler: { action in
                 navType.openWith(location, completion: {
                     completion($0)
